@@ -2,7 +2,28 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { CheckCircle, TrendingUp, Mail, Phone, User, Globe, ArrowRight, Loader2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
+
+// --- ANIMASYON VARYANTLARI (Build Hatasını Çözmek İçin Bileşen Dışında Tanımlandı) ---
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2, delayChildren: 0.3 }
+  }
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+};
 
 export default function ElifSelenLanding() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
@@ -10,27 +31,6 @@ export default function ElifSelenLanding() {
   const [notification, setNotification] = useState<any>(null);
 
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwy_ReoSB8KkLdjTkiTY8Rj34pwb1zGMtLFW7xMptMi6Yr0m4s_LLcsuZ10mHrBJoNO/exec";
-
-  // Animasyon Varyantları (Hata çözümü için eklendi)
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2, delayChildren: 0.3 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1] // "easeOut" yerine daha güvenli olan cubic-bezier değerini ekledik
-      }
-    }
-  };
 
   // Kazanç Bildirimleri (10 Kişi)
   const notifications = [
@@ -53,7 +53,7 @@ export default function ElifSelenLanding() {
       setTimeout(() => setNotification(null), 4000);
     }, 8000);
     return () => clearInterval(interval);
-  }, []);
+  }, [notifications]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
